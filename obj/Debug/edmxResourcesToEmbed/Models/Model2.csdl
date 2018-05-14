@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Aterrizar_DbModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Auto">
+    <Key>
+      <PropertyRef Name="IdAuto" />
+    </Key>
+    <Property Name="IdAuto" Type="Int32" Nullable="false" />
+    <Property Name="PrecioPorDia" Type="Double" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdProvinica" Type="Int32" Nullable="false" />
+    <Property Name="Foto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Gama" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Provincia" Relationship="Self.FK_Autos_Provincias" FromRole="Autos" ToRole="Provincias" />
+    <NavigationProperty Name="Reservas" Relationship="Self.FK_Reservas_Autos" FromRole="Autos" ToRole="Reservas" />
+  </EntityType>
+  <EntityType Name="Hotele">
+    <Key>
+      <PropertyRef Name="IdHotel" />
+    </Key>
+    <Property Name="IdHotel" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PrecioPorDia" Type="Double" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdProvincia" Type="Int32" Nullable="false" />
+    <Property Name="Foto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Categoria" Type="Int32" Nullable="false" />
+    <Property Name="Cantidad" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Provincia" Relationship="Self.FK_Hoteles_Provincias" FromRole="Hoteles" ToRole="Provincias" />
+    <NavigationProperty Name="Reservas" Relationship="Self.FK_Reservas_Hoteles" FromRole="Hoteles" ToRole="Reservas" />
+  </EntityType>
+  <EntityType Name="Pago">
+    <Key>
+      <PropertyRef Name="IdPago" />
+    </Key>
+    <Property Name="IdPago" Type="Int32" Nullable="false" />
+    <Property Name="IdReserva" Type="Int32" Nullable="false" />
+    <Property Name="MetodoPago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Reserva" Relationship="Self.FK_Pagos_Reservas" FromRole="Pagos" ToRole="Reservas" />
+  </EntityType>
+  <EntityType Name="Provincia">
+    <Key>
+      <PropertyRef Name="IdProvincia" />
+    </Key>
+    <Property Name="IdProvincia" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Autos" Relationship="Self.FK_Autos_Provincias" FromRole="Provincias" ToRole="Autos" />
+    <NavigationProperty Name="Hoteles" Relationship="Self.FK_Hoteles_Provincias" FromRole="Provincias" ToRole="Hoteles" />
+  </EntityType>
+  <EntityType Name="Reserva">
+    <Key>
+      <PropertyRef Name="IdReserva" />
+    </Key>
+    <Property Name="IdReserva" Type="Int32" Nullable="false" />
+    <Property Name="Precio" Type="Double" Nullable="false" />
+    <Property Name="IdUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Desde" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Hasta" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="IdAuto" Type="Int32" />
+    <Property Name="IdHotel" Type="Int32" />
+    <NavigationProperty Name="Auto" Relationship="Self.FK_Reservas_Autos" FromRole="Reservas" ToRole="Autos" />
+    <NavigationProperty Name="Hotele" Relationship="Self.FK_Reservas_Hoteles" FromRole="Reservas" ToRole="Hoteles" />
+    <NavigationProperty Name="Pagos" Relationship="Self.FK_Pagos_Reservas" FromRole="Reservas" ToRole="Pagos" />
+    <NavigationProperty Name="Usuario" Relationship="Self.FK_Reservas_Usuarios" FromRole="Reservas" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="IdUsuario" />
+    </Key>
+    <Property Name="IdUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Foto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Reservas" Relationship="Self.FK_Reservas_Usuarios" FromRole="Usuarios" ToRole="Reservas" />
+  </EntityType>
+  <Association Name="FK_Autos_Provincias">
+    <End Role="Provincias" Type="Self.Provincia" Multiplicity="1" />
+    <End Role="Autos" Type="Self.Auto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provincias">
+        <PropertyRef Name="IdProvincia" />
+      </Principal>
+      <Dependent Role="Autos">
+        <PropertyRef Name="IdProvinica" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservas_Autos">
+    <End Role="Autos" Type="Self.Auto" Multiplicity="0..1" />
+    <End Role="Reservas" Type="Self.Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Autos">
+        <PropertyRef Name="IdAuto" />
+      </Principal>
+      <Dependent Role="Reservas">
+        <PropertyRef Name="IdAuto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Hoteles_Provincias">
+    <End Role="Provincias" Type="Self.Provincia" Multiplicity="1" />
+    <End Role="Hoteles" Type="Self.Hotele" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provincias">
+        <PropertyRef Name="IdProvincia" />
+      </Principal>
+      <Dependent Role="Hoteles">
+        <PropertyRef Name="IdProvincia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservas_Hoteles">
+    <End Role="Hoteles" Type="Self.Hotele" Multiplicity="0..1" />
+    <End Role="Reservas" Type="Self.Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hoteles">
+        <PropertyRef Name="IdHotel" />
+      </Principal>
+      <Dependent Role="Reservas">
+        <PropertyRef Name="IdHotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pagos_Reservas">
+    <End Role="Reservas" Type="Self.Reserva" Multiplicity="1" />
+    <End Role="Pagos" Type="Self.Pago" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reservas">
+        <PropertyRef Name="IdReserva" />
+      </Principal>
+      <Dependent Role="Pagos">
+        <PropertyRef Name="IdReserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservas_Usuarios">
+    <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+    <End Role="Reservas" Type="Self.Reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="IdUsuario" />
+      </Principal>
+      <Dependent Role="Reservas">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Aterrizar_DbEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Autos" EntityType="Self.Auto" />
+    <EntitySet Name="Hoteles" EntityType="Self.Hotele" />
+    <EntitySet Name="Pagos" EntityType="Self.Pago" />
+    <EntitySet Name="Provincias" EntityType="Self.Provincia" />
+    <EntitySet Name="Reservas" EntityType="Self.Reserva" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+    <AssociationSet Name="FK_Autos_Provincias" Association="Self.FK_Autos_Provincias">
+      <End Role="Provincias" EntitySet="Provincias" />
+      <End Role="Autos" EntitySet="Autos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservas_Autos" Association="Self.FK_Reservas_Autos">
+      <End Role="Autos" EntitySet="Autos" />
+      <End Role="Reservas" EntitySet="Reservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Hoteles_Provincias" Association="Self.FK_Hoteles_Provincias">
+      <End Role="Provincias" EntitySet="Provincias" />
+      <End Role="Hoteles" EntitySet="Hoteles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservas_Hoteles" Association="Self.FK_Reservas_Hoteles">
+      <End Role="Hoteles" EntitySet="Hoteles" />
+      <End Role="Reservas" EntitySet="Reservas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pagos_Reservas" Association="Self.FK_Pagos_Reservas">
+      <End Role="Reservas" EntitySet="Reservas" />
+      <End Role="Pagos" EntitySet="Pagos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservas_Usuarios" Association="Self.FK_Reservas_Usuarios">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="Reservas" EntitySet="Reservas" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
